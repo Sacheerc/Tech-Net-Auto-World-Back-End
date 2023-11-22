@@ -1,7 +1,7 @@
 // src/models/User.ts
 
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../configs/db';
+import sequelize  from '../configs/db';
 
 enum UserRole {
     USER = 'user',
@@ -37,9 +37,11 @@ User.init(
         },
     },
     {
-        tableName: 'users',
+        modelName: 'User',
+        tableName: 'user',
         sequelize: sequelize,
     }
 );
 
+console.log(User === sequelize.models.User);
 export { User, UserRole };

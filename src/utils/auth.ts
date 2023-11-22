@@ -16,6 +16,7 @@ function generateToken(payload: JwtPayload): string {
 }
 
 function verifyToken(token: string): JwtPayload {
+    console.log('verify token')
     return jwt.verify(token, secretKey) as JwtPayload;
 }
 

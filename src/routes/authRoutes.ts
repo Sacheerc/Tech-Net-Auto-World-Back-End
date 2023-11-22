@@ -5,12 +5,14 @@ import AuthController from '../controllers/authController';
 import { authenticateToken } from '../middleware/authMiddleware';
 import { UserRole } from '../models/User';
 
-const router = express.Router();
+const authRouter = express.Router();
 
-router.post('/login', AuthController.login);
+authRouter.post('/login', AuthController.login);
 
-router.get('/profile', authenticateToken([UserRole.USER, UserRole.ADMIN]), () => AuthController.profile);
+authRouter.post('/signup', AuthController.signup);
 
-router.get('/admin', authenticateToken([UserRole.ADMIN]), () => AuthController.admin);
+authRouter.get('/profile', authenticateToken([UserRole.USER, UserRole.ADMIN]), AuthController.profile);
 
-export { router };
+authRouter.get('/admin', authenticateToken([UserRole.ADMIN]), AuthController.admin);
+
+export { authRouter };

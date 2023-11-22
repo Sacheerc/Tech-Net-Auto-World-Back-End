@@ -9,7 +9,7 @@ class AuthController {
         const { username, password } = req.body;
 
         const user = await User.findOne({ where: { username, password } });
-
+        console.log(user);
         if (!user) {
             res.status(401).json({ message: 'Invalid credentials' });
             return;
@@ -24,12 +24,28 @@ class AuthController {
         res.json({ token });
     }
 
-    static profile(req: Request, res: Response): void {
-        // Access user details from req.user
-        res.json({ user: req.user });
+    static async signup(req: Request, res: Response): Promise<void> {
+        console.log(req.body)
+        const { username, password, role } = req.body;
+        console.log(username, password, role)
+
+        const user = await User.create({ username: username, password: password, role: role});
+
+        if (!user) {
+            res.status(401).json({ message: 'Failed' });
+            return;
+        }
+
+        res.json({ user });
     }
 
-    static admin(req: Request, res: Response): void {
+    static profile(req: Request, res: Response ): void {
+        // Access user details from req.user
+        res.json({ user: req.user });
+    
+    }
+
+    static async admin(req: Request, res: Response): Promise<void> {
         // Accessible only to users with the 'admin' role
         res.json({ message: 'Admin-only access' });
     }
