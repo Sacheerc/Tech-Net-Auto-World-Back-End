@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import sequelize from './configs/db';
 import { authRouter } from './routes/authRoutes';
 
@@ -7,9 +7,7 @@ const port = 3000;
 
 app.use(express.json());
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello, TypeScript with Express!');
-});
+//Define routes
 app.use('/auth', authRouter);
 
 sequelize

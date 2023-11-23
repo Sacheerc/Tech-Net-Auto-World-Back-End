@@ -1,54 +1,84 @@
-// src/controllers/authController.ts
-
 import { Request, Response } from 'express';
-import { User, UserRole } from '../models/User';
+import { User } from '../models/User';
 import { generateToken } from '../utils/auth';
 
 class AuthController {
-    static async login(req: Request, res: Response): Promise<void> {
-        const { username, password } = req.body;
+  /**
+   * Method for validate users and generate JWT token
+   * @param req
+   * @param res
+   * @returns
+   */
+  static async login(req: Request, res: Response): Promise<void> {
+    const { username, password } = req.body;
 
-        const user = await User.findOne({ where: { username, password } });
-        console.log(user);
-        if (!user) {
-            res.status(401).json({ message: 'Invalid credentials' });
-            return;
-        }
-
-        const token = generateToken({
-            userId: user.id,
-            username: user.username,
-            role: user.role,
-        });
-
-        res.json({ token });
+    //Retrieving user data from database
+    const user = await User.findOne({ where: { username, password } });
+    if (!user) {
+      console.log(
+        `Invalid credentials for user: ${username} TimeStamp: ${new Date()}`
+      );
+      res.status(401).json({ message: 'Invalid credentials' });
+      return;
     }
 
-    static async signup(req: Request, res: Response): Promise<void> {
-        console.log(req.body)
-        const { username, password, role } = req.body;
-        console.log(username, password, role)
+    //Generate JWT token
+    const token = generateToken({
+      userId: user.id,
+      username: user.username,
+      role: user.role,
+    });
 
-        const user = await User.create({ username: username, password: password, role: role});
+    res.json({ token });
+  }
 
-        if (!user) {
-            res.status(401).json({ message: 'Failed' });
-            return;
-        }
+  /**
+   * Method to signup new users
+   * @param req
+   * @param res
+   * @returns
+   */
+  static async signup(req: Request, res: Response): Promise<void> {
+    const { username, password, role } = req.body;
 
-        res.json({ user });
+    //Create and save user in database
+    const user = await User.create({
+      username: username,
+      password: password,
+      role: role,
+    });
+
+    if (!user) {
+      console.log(
+        `Create user has been failed. user: ${username} TimeStamp: ${new Date()}`
+      );
+      res.status(401).json({ message: 'Failed' });
+      return;
     }
 
-    static profile(req: Request, res: Response ): void {
-        // Access user details from req.user
-        res.json({ user: req.user });
-    
-    }
+    console.log(`The user succeefully created: `, user);
+    res.json({ user });
+  }
 
-    static async admin(req: Request, res: Response): Promise<void> {
-        // Accessible only to users with the 'admin' role
-        res.json({ message: 'Admin-only access' });
-    }
+  /**
+   * Method to retrive user details
+   * @param req
+   * @param res
+   */
+  static profile(req: Request, res: Response): void {
+    // Access user details from request. The user should be assigned to body when JWT creation
+    res.json({ user: req.body.user });
+  }
+
+  /**
+   * Sample method to demonstrate admin authorization
+   * @param req
+   * @param res
+   */
+  static async admin(req: Request, res: Response): Promise<void> {
+    // Accessible only to users with the 'admin' role
+    res.json({ message: 'Admin-only access' });
+  }
 }
 
 export default AuthController;
