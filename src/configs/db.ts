@@ -1,10 +1,9 @@
-import { Sequelize } from 'sequelize-typescript';
+import { Sequelize } from 'sequelize';
 
-export const sequelize = new Sequelize({
-    dialect: 'mysql',
-    database: 'tech_net',
-    username: 'root',
-    password: '',
-    host: 'localhost',
-    models: [__dirname + '/models'],
+//Initiate Sequekize library
+const sequelize = new Sequelize('tech_net', 'root', '', {
+  host: 'localhost',
+  dialect: 'mysql',
 });
+
+export default sequelize;
