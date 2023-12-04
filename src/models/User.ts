@@ -12,6 +12,7 @@ class User extends Model {
   public username!: string;
   public password!: string;
   public role!: UserRole;
+  public email!: string;
 }
 
 //Defining User schema

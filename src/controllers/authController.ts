@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { User } from '../models/User';
 import { generateToken } from '../utils/auth';
+import bcrypt from 'bcrypt';
+const { ENCRYPTION_KEY } = process.env;
 
 class AuthController {
   /**
@@ -13,23 +15,36 @@ class AuthController {
     const { username, password } = req.body;
 
     //Retrieving user data from database
-    const user = await User.findOne({ where: { username, password } });
-    if (!user) {
+    const user = await User.findOne({ where: { username } });
+
+    //Validate user existence and the password
+    const userExists = !!user;
+    const passwordCorrect =
+      userExists && (await bcrypt.compare(password, user.password));
+
+    if (userExists && passwordCorrect) {
+      //Generate JWT token
+      const token = generateToken({
+        userId: user.id,
+        username: user.username,
+        role: user.role,
+      });
+
+      res.status(200).json({
+        success: true,
+        user: {
+          user_id: user.id,
+          email: user.email,
+          name: user.username,
+          auth_token: token,
+        },
+      });
+    } else {
       console.log(
         `Invalid credentials for user: ${username} TimeStamp: ${new Date()}`
       );
       res.status(401).json({ message: 'Invalid credentials' });
-      return;
     }
-
-    //Generate JWT token
-    const token = generateToken({
-      userId: user.id,
-      username: user.username,
-      role: user.role,
-    });
-
-    res.json({ token });
   }
 
   /**
@@ -41,10 +56,13 @@ class AuthController {
   static async signup(req: Request, res: Response): Promise<void> {
     const { username, password, role } = req.body;
 
+    // Encrypt user password
+    const passwordHash = await bcrypt.hash(password, Number(ENCRYPTION_KEY!));
+
     //Create and save user in database
     const user = await User.create({
       username: username,
-      password: password,
+      password: passwordHash,
       role: role,
     });
 
@@ -57,7 +75,10 @@ class AuthController {
     }
 
     console.log(`The user succeefully created: `, user);
-    res.json({ user });
+    res.status(200).json({
+      success: true,
+      user,
+    });
   }
 
   /**

@@ -1,8 +1,6 @@
+const { AUTH_TOKEN_EXPIRE_TIME, AUTH_TOKEN_KEY } = process.env;
 import jwt from 'jsonwebtoken';
 import { UserRole } from '../models/User';
-
-//Todo: Replace with a secure secret key and need to implement a mecanism to obtain key from a config
-const secretKey = '1234567';
 
 interface JwtPayload {
   userId: number;
@@ -10,13 +8,17 @@ interface JwtPayload {
   role: UserRole;
 }
 
+const jwtOptions = {
+  expiresIn: AUTH_TOKEN_EXPIRE_TIME, // Expire token in 24 hours
+};
+
 /**
  * Generate JWT token
  * @param payload
  * @returns
  */
 function generateToken(payload: JwtPayload): string {
-  return jwt.sign(payload, secretKey, { expiresIn: '1h' });
+  return jwt.sign(payload, AUTH_TOKEN_KEY!, jwtOptions);
 }
 
 /**
@@ -25,7 +27,7 @@ function generateToken(payload: JwtPayload): string {
  * @returns
  */
 function verifyToken(token: string): JwtPayload {
-  return jwt.verify(token, secretKey) as JwtPayload;
+  return jwt.verify(token, AUTH_TOKEN_KEY!) as JwtPayload;
 }
 
 export { generateToken, verifyToken };
