@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Inventory } from '../models/Inventory';
+// import { Inventory } from '../temp/Inventory';
 
 class InventoryController {
   /**
@@ -10,7 +10,7 @@ class InventoryController {
    */
   static async add(req: Request, res: Response): Promise<void> {
     const id = 1;
-    const inventory = await Inventory.findOne({ where: { id } });
+    // const inventory = await Inventory.findOne({ where: { id } });
     res.status(401).json({ message: 'Invalid credentials' });
   }
 }

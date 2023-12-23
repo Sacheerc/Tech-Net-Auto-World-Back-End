@@ -1,33 +1,23 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../configs/db';
+import { Column, DataType, Table, Model, ForeignKey } from 'sequelize-typescript';
 import { Inventory } from './Inventory';
 
 //Defining Employee model
+@Table({ tableName: 'inventory_image' })
 class InventoryImage extends Model {
-  public inventoryId!: number;
+  @Column({
+    type: DataType.INTEGER.UNSIGNED,
+    autoIncrement: true,
+    primaryKey: true
+  })
+  public id!: number;
+
+  @Column({
+    type: DataType.STRING
+  })
   public imageUrl!: string;
+
+  @ForeignKey(() => Inventory)
+  public inventoryId!: number;
 }
-
-//Defining Employee schema
-InventoryImage.init(
-  {
-    id: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    imageUrl: {
-      type: DataTypes.STRING,
-      primaryKey: true,
-    },
-  },
-  {
-    modelName: 'InventoryImage',
-    tableName: 'inventory_image',
-    sequelize: sequelize,
-  }
-);
-
-InventoryImage.belongsTo(Inventory);
 
 export { InventoryImage };

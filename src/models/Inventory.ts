@@ -1,68 +1,46 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../configs/db';
+import { Column, Table, Model, DataType, HasMany } from 'sequelize-typescript';
 import { InventoryImage } from './InventoryImage';
+import { UsedInventoryItem } from './UsedInventoryItem';
 
 //Defining User model
+@Table({ tableName: 'inventory' })
 class Inventory extends Model {
+  @Column({
+    type: DataType.INTEGER.UNSIGNED,
+    autoIncrement: true,
+    primaryKey: true
+  })
   public id!: number;
+
+  @Column(DataType.STRING)
   public code!: string;
+
+  @Column(DataType.STRING)
   public name!: string;
+
+  @Column(DataType.STRING)
   public description!: string;
-  public quantity!: string;
-  public price!: string;
+
+  @Column(DataType.INTEGER.UNSIGNED)
+  public quantity!: number;
+
+  @Column(DataType.DOUBLE)
+  public price!: number;
+
+  @Column(DataType.STRING)
   public locationCode!: string;
+
+  @Column(DataType.STRING)
   public countryOfOrigin!: string;
+
+  @Column(DataType.STRING)
   public brand!: string;
+
+  @HasMany(() => InventoryImage)
+  images!: InventoryImage[]
+
+  @HasMany(() => UsedInventoryItem)
+  usedInventoryItems!: UsedInventoryItem[]
 }
-
-//Defining User schema
-Inventory.init(
-  {
-    id: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    code: {
-      type: new DataTypes.STRING(128),
-      allowNull: false,
-    },
-    name: {
-      type: new DataTypes.STRING(128),
-      allowNull: true,
-    },
-    description: {
-      type: new DataTypes.STRING(128),
-      allowNull: true,
-    },
-    quantity: {
-      type: new DataTypes.INTEGER.UNSIGNED(),
-      allowNull: false,
-    },
-    price: {
-      type: new DataTypes.DOUBLE(),
-      allowNull: false,
-    },
-    locationCode: {
-      type: new DataTypes.DOUBLE(),
-      allowNull: false,
-    },
-    countryOfOorigin: {
-      type: new DataTypes.DOUBLE(),
-      allowNull: false,
-    },
-    brand: {
-      type: new DataTypes.DOUBLE(),
-      allowNull: false,
-    },
-  },
-  {
-    modelName: 'Inventory',
-    tableName: 'inventory',
-    sequelize: sequelize,
-  }
-);
-
-Inventory.hasMany(InventoryImage);
 
 export { Inventory };

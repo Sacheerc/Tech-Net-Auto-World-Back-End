@@ -1,5 +1,6 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../configs/db';
+import { Column, DataType, Table, Model, HasMany } from 'sequelize-typescript';
+import { JobCard } from './JobCard';
+import { ServiceRecord } from './ServiceRecord';
 
 enum Gender {
   MALE = 'male',
@@ -8,70 +9,50 @@ enum Gender {
 }
 
 //Defining Employee model
+@Table({ tableName: 'employee' })
 class Employee extends Model {
+  @Column({
+    type: DataType.INTEGER.UNSIGNED,
+    autoIncrement: true,
+    primaryKey: true
+  })
   public id!: number;
-  public firstName!: string;
-  public lastName!: string;
-  public address!: string;
-  public contact!: string;
-  public email!: string;
-  public contractId!: number;
-  public nic!: string;
-  public dob!: string;
-  public gender!: Gender;
-  public profileImage!: string;
-}
 
-//Defining Employee schema
-Employee.init(
-  {
-    id: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    firstName: {
-      type: new DataTypes.STRING(200),
-      allowNull: false,
-    },
-    lastName: {
-      type: new DataTypes.STRING(200),
-      allowNull: false,
-    },
-    address: {
-      type: new DataTypes.STRING(128),
-      allowNull: false,
-    },
-    contact: {
-      type: new DataTypes.STRING(150),
-      allowNull: false,
-    },
-    email: {
-      type: new DataTypes.STRING(150),
-      allowNull: false,
-    },
-    nic: {
-      type: new DataTypes.STRING(150),
-      allowNull: false,
-    },
-    dob: {
-      type: new DataTypes.STRING(150),
-      allowNull: false,
-    },
-    gender: {
-      type: DataTypes.ENUM(...Object.values(Gender)),
-      allowNull: false,
-    },
-    profileImage: {
-      type: new DataTypes.STRING(150),
-      allowNull: true,
-    },
-  },
-  {
-    modelName: 'Employee',
-    tableName: 'employee',
-    sequelize: sequelize,
-  }
-);
+  @Column(DataType.STRING)
+  public firstName!: string;
+
+  @Column(DataType.STRING)
+  public lastName!: string;
+
+  @Column(DataType.STRING)
+  public address!: string;
+
+  @Column(DataType.STRING)
+  public contact!: string;
+
+  @Column(DataType.STRING)
+  public email!: string;
+
+  @Column(DataType.INTEGER)
+  public contractId!: number;
+
+  @Column(DataType.STRING)
+  public nic!: string;
+
+  @Column(DataType.STRING)
+  public dob!: string;
+
+  @Column(DataType.ENUM(...Object.values(Gender)))
+  public gender!: Gender;
+
+  @Column(DataType.STRING)
+  public profileImage!: string;
+
+  @HasMany(() => JobCard)
+  jobCards!: JobCard[]
+
+  @HasMany(() => ServiceRecord)
+  serviceRecords!: ServiceRecord[]
+}
 
 export { Employee };

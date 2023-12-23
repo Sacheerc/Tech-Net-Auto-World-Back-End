@@ -47,6 +47,20 @@ class AuthController {
     }
   }
 
+  // static async test(req: Request, res: Response) {
+  //   let users = await User.findAll({
+  //     limit: 10,
+  //     offset: 2,
+  //     include: [
+  //       {
+  //         model: Post,
+  //         attributes: ['imageUrl']
+  //       }
+  //     ]
+  //   });
+  //   res.json(users)
+  // }
+
   /**
    * Method to signup new users
    * @param req

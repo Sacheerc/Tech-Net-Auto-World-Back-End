@@ -1,60 +1,41 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../configs/db';
+import { Column, DataType, Table, Model, ForeignKey, HasMany } from 'sequelize-typescript';
+import { Employee } from './Employee';
+import { Vehicle } from './Vehicle';
+import { UsedInventoryItem } from './UsedInventoryItem';
 
 //Defining Employee model
+@Table({ tableName: 'service_record' })
 class ServiceRecord extends Model {
+  @Column({
+    type: DataType.INTEGER.UNSIGNED,
+    autoIncrement: true,
+    primaryKey: true,
+  })
   public id!: number;
-  public vehicleNo!: string;
-  public checkIn!: string;
-  public checkOut!: string;
-  public customerName!: string;
-  public customerNic!: string;
-  public customerContact!: string;
-  public employeeId!: number;
-}
 
-//Defining Employee schema
-ServiceRecord.init(
-  {
-    id: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    vehicleNo: {
-      type: new DataTypes.STRING(100),
-      allowNull: false,
-    },
-    checkIn: {
-      type: new DataTypes.STRING(150),
-      allowNull: false,
-    },
-    checkOut: {
-      type: new DataTypes.STRING(150),
-      allowNull: false,
-    },
-    customerName: {
-      type: new DataTypes.STRING(200),
-      allowNull: false,
-    },
-    customerNic: {
-      type: new DataTypes.STRING(100),
-      allowNull: false,
-    },
-    customerContact: {
-      type: new DataTypes.STRING(100),
-      allowNull: false,
-    },
-    employeeId: {
-      type: new DataTypes.NUMBER(),
-      allowNull: false,
-    },
-  },
-  {
-    modelName: 'ServiceRecord',
-    tableName: 'service_record',
-    sequelize: sequelize,
-  }
-);
+  @Column(DataType.STRING)
+  public checkIn!: string;
+
+  @Column(DataType.STRING)
+  public checkOut!: string;
+
+  @Column(DataType.STRING)
+  public customerName!: string;
+
+  @Column(DataType.STRING)
+  public customerNic!: string;
+
+  @Column(DataType.STRING)
+  public customerContact!: string;
+
+  @ForeignKey(() => Employee)
+  public employeeId!: number;
+
+  @ForeignKey(() => Vehicle)
+  public vehicleNo!: string;
+
+  @HasMany(() => UsedInventoryItem)
+  usedInventoryItems!: UsedInventoryItem[]
+}
 
 export { ServiceRecord };

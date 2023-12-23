@@ -11,7 +11,7 @@ import { UserRole } from '../models/User';
 const authRouter = express.Router();
 
 //Define routes
-authRouter.post(
+authRouter.get(
   '/login',
   validateHasParameters('username', 'password'),
   AuthController.login

@@ -1,5 +1,4 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../configs/db';
+import { Column, Table, Model, HasMany, DataType } from 'sequelize-typescript';
 
 enum UserRole {
   USER = 'user',
@@ -7,41 +6,27 @@ enum UserRole {
 }
 
 //Defining User model
+@Table({ tableName: 'user' })
 class User extends Model {
+
+  @Column({
+    type: DataType.INTEGER.UNSIGNED,
+    autoIncrement: true,
+    primaryKey: true,
+  })
   public id!: number;
+
+  @Column(DataType.STRING)
   public username!: string;
+
+  @Column(DataType.STRING)
   public password!: string;
+
+  @Column(DataType.ENUM(...Object.values(UserRole)))
   public role!: UserRole;
+
+  @Column(DataType.STRING)
   public email!: string;
 }
-
-//Defining User schema
-User.init(
-  {
-    id: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    username: {
-      type: new DataTypes.STRING(128),
-      allowNull: false,
-    },
-    password: {
-      type: new DataTypes.STRING(128),
-      allowNull: false,
-    },
-    role: {
-      type: DataTypes.ENUM(...Object.values(UserRole)),
-      allowNull: false,
-      defaultValue: UserRole.USER,
-    },
-  },
-  {
-    modelName: 'User',
-    tableName: 'user',
-    sequelize: sequelize,
-  }
-);
 
 export { User, UserRole };
