@@ -1,7 +1,15 @@
-import { Column, DataType, Table, Model, ForeignKey, HasMany } from 'sequelize-typescript';
+import {
+  Column,
+  DataType,
+  Table,
+  Model,
+  ForeignKey,
+  HasMany,
+} from 'sequelize-typescript';
 import { Employee } from './Employee';
 import { Vehicle } from './Vehicle';
 import { UsedInventoryItem } from './UsedInventoryItem';
+import { JobCard } from './JobCard';
 
 //Defining Employee model
 @Table({ tableName: 'service_record' })
@@ -28,6 +36,9 @@ class ServiceRecord extends Model {
   @Column(DataType.STRING)
   public customerContact!: string;
 
+  @Column(DataType.STRING)
+  public status!: string;
+
   @ForeignKey(() => Employee)
   public employeeId!: number;
 
@@ -35,7 +46,10 @@ class ServiceRecord extends Model {
   public vehicleNo!: string;
 
   @HasMany(() => UsedInventoryItem)
-  usedInventoryItems!: UsedInventoryItem[]
+  usedInventoryItems!: UsedInventoryItem[];
+
+  @HasMany(() => JobCard)
+  jobCards!: JobCard[];
 }
 
 export { ServiceRecord };
