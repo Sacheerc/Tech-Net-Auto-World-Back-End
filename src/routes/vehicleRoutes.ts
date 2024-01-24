@@ -5,6 +5,7 @@ const vehicleRouter = express.Router();
 
 vehicleRouter.post('/add', VehicleController.add);
 vehicleRouter.get('/all', VehicleController.getAllVehicles);
+vehicleRouter.get('/vehicle-no-list', VehicleController.loadVehicleNoList);
 vehicleRouter.get('/:id', VehicleController.loadVehicleById);
 vehicleRouter.delete('/:id', VehicleController.delete);
 

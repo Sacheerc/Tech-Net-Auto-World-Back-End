@@ -49,6 +49,29 @@ class VehicleController {
   }
 
   /**
+   * Load all vehicles
+   * @param req
+   * @param res
+   * @returns
+   */
+  static async loadVehicleNoList(req: Request, res: Response): Promise<void> {
+    try {
+      const vehicles = await Vehicle.findAll({ attributes: ['vehicleNo'] });
+      const vehicleNoList: string[] = vehicles.map(vehicle => vehicle.vehicleNo);
+      console.log(`Vehicles Numbers were successfully loaded`);
+      res.status(200).json({
+        success: true,
+        vehicleNoList,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error,
+      });
+    }
+  }
+
+  /**
    * Load vehicle by Id
    * @param req
    * @param res

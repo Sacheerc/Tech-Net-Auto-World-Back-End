@@ -1,16 +1,13 @@
 import express from 'express';
-// import InventoryController from '../controllers/inventoryController';
-import { authenticateToken } from '../middleware/authMiddleware';
-import { validateHasParameters } from '../middleware/validation';
-import { UserRole } from '../models/User';
+import InventoryController from '../controllers/inventoryController';
 
 const inventoryRouter = express.Router();
 
 //Define routes
-// inventoryRouter.post(
-//   '/add',
-//   authenticateToken([UserRole.ADMIN]),
-//   InventoryController.add
-// );
+inventoryRouter.post('/add', InventoryController.add);
+inventoryRouter.get('/inventory-code-list', InventoryController.loadInventoryCodeList);
+inventoryRouter.get('/:code', InventoryController.loadInventoryByCode);
+
+
 
 export { inventoryRouter };
