@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { Inventory } from '../models/Inventory';
-// import { Inventory } from '../temp/Inventory';
 
 class InventoryController {
   /**
@@ -73,6 +72,75 @@ class InventoryController {
       });
     }
   }
+
+  /**
+  * Load all inventories
+  * @param req
+  * @param res
+  * @returns
+  */
+  static async getAllInventories(req: Request, res: Response): Promise<void> {
+    try {
+      const inventories = await Inventory.findAll();
+      console.log(`Inventories were successfully loaded`);
+      res.status(200).json({
+        success: true,
+        inventories,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error,
+      });
+    }
+  }
+
+  /**
+   * Load inventory by Id
+   * @param req
+   * @param res
+   * @returns
+   */
+  static async loadInventoryById(req: Request, res: Response): Promise<void> {
+    try {
+      const code = req.params.id;
+      const vehicle = await Inventory.findByPk(code);
+      console.log(`Inventory ${code} was successfully loaded`);
+      res.status(200).json({
+        success: true,
+        vehicle,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error,
+      });
+    }
+  }
+
+    /**
+   * Remove inventory by id
+   * @param req
+   * @param res
+   * @returns
+   */
+    static async delete(req: Request, res: Response): Promise<void> {
+      try {
+        await Inventory.destroy({ where: { code: req.params.id } });
+        console.log(
+          `Inventory for code: ${req.params.id} successfully deleted`
+        );
+        res.status(200).json({
+          success: true,
+          message: `Inventory for code: ${req.params.id} successfully deleted`,
+        });
+      } catch (error) {
+        res.status(500).json({
+          success: false,
+          error,
+        });
+      }
+    }
 }
 
 export default InventoryController;
