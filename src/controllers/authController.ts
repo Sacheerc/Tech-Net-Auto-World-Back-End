@@ -114,6 +114,53 @@ class AuthController {
     // Accessible only to users with the 'admin' role
     res.json({ message: 'Admin-only access' });
   }
+
+  /**
+  * Load all users
+  * @param req
+  * @param res
+  * @returns
+  */
+  static async getAllUsers(req: Request, res: Response): Promise<void> {
+    try {
+      const users = await User.findAll();
+      console.log(`Users were successfully loaded`);
+      res.status(200).json({
+        success: true,
+        users,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error,
+      });
+    }
+  }
+
+    /**
+   * Method for add users
+   * @param req
+   * @param res
+   * @returns
+   */
+    static async add(req: Request, res: Response): Promise<void> {
+      const user = new User(req.body);
+  
+      try {
+        await user.save();
+        console.log(`The User successfully created: `, user);
+        res.status(200).json({
+          success: true,
+          user,
+        });
+      } catch (error) {
+        res.status(500).json({
+          success: false,
+          error,
+        });
+      }
+      res.status(401).json({ message: 'Invalid credentials' });
+    }
 }
 
 export default AuthController;

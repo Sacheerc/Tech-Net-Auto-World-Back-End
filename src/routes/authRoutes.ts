@@ -31,4 +31,7 @@ authRouter.get(
   AuthController.admin
 );
 
+authRouter.get('/all', AuthController.getAllUsers);
+authRouter.post('/add', AuthController.add);
+
 export { authRouter };
