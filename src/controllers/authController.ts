@@ -161,6 +161,30 @@ class AuthController {
       }
       res.status(401).json({ message: 'Invalid credentials' });
     }
+
+  /**
+  * Remove delete by id
+  * @param req
+  * @param res
+  * @returns
+  */
+    static async delete(req: Request, res: Response): Promise<void> {
+      try {
+        await User.destroy({ where: { id: req.params.id } });
+        console.log(
+          `User for id: ${req.params.id} successfully deleted`
+        );
+        res.status(200).json({
+          success: true,
+          message: `User for id: ${req.params.id} successfully deleted`,
+        });
+      } catch (error) {
+        res.status(500).json({
+          success: false,
+          error,
+        });
+      }
+    }
 }
 
 export default AuthController;

@@ -33,5 +33,6 @@ authRouter.get(
 
 authRouter.get('/all', AuthController.getAllUsers);
 authRouter.post('/add', AuthController.add);
+authRouter.delete('/:id', AuthController.delete);
 
 export { authRouter };
