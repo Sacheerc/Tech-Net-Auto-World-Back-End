@@ -1,6 +1,7 @@
 import { Column, Table, Model, DataType, HasMany } from 'sequelize-typescript';
 import { InventoryImage } from './InventoryImage';
-import { UsedInventoryItem } from './UsedInventoryItem';
+import { QuotationSparePart } from './QuotationSparePart';
+import { InvoiceSparePart } from './InvoiceSparePart';
 
 //Defining User model
 @Table({ tableName: 'inventory' })
@@ -8,7 +9,7 @@ class Inventory extends Model {
   @Column({
     type: DataType.INTEGER.UNSIGNED,
     autoIncrement: true,
-    primaryKey: true
+    primaryKey: true,
   })
   public id!: number;
 
@@ -27,6 +28,9 @@ class Inventory extends Model {
   @Column(DataType.DOUBLE)
   public price!: number;
 
+  @Column(DataType.DOUBLE)
+  public holded!: number;
+
   @Column(DataType.STRING)
   public locationCode!: string;
 
@@ -37,10 +41,13 @@ class Inventory extends Model {
   public brand!: string;
 
   @HasMany(() => InventoryImage)
-  images!: InventoryImage[]
+  images!: InventoryImage[];
 
-  @HasMany(() => UsedInventoryItem)
-  usedInventoryItems!: UsedInventoryItem[]
+  @HasMany(() => QuotationSparePart)
+  quotationSpareParts!: QuotationSparePart[];
+
+  @HasMany(() => InvoiceSparePart)
+  invoiceSpareParts!: InvoiceSparePart[];
 }
 
 export { Inventory };

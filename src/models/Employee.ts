@@ -1,6 +1,5 @@
 import { Column, DataType, Table, Model, HasMany } from 'sequelize-typescript';
-import { JobCard } from './JobCard';
-import { ServiceRecord } from './ServiceRecord';
+import { WorkOrder } from './WorkOrder';
 
 enum Gender {
   MALE = 'male',
@@ -14,7 +13,7 @@ class Employee extends Model {
   @Column({
     type: DataType.INTEGER.UNSIGNED,
     autoIncrement: true,
-    primaryKey: true
+    primaryKey: true,
   })
   public id!: number;
 
@@ -48,11 +47,8 @@ class Employee extends Model {
   @Column(DataType.STRING)
   public profileImage!: string;
 
-  @HasMany(() => JobCard)
-  jobCards!: JobCard[]
-
-  @HasMany(() => ServiceRecord)
-  serviceRecords!: ServiceRecord[]
+  @HasMany(() => WorkOrder)
+  workOrders!: WorkOrder[];
 }
 
 export { Employee };

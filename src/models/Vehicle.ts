@@ -1,5 +1,14 @@
-import { Column, DataType, Table, Model, HasMany } from 'sequelize-typescript';
-import { ServiceRecord } from './ServiceRecord';
+import {
+  Column,
+  DataType,
+  Table,
+  Model,
+  ForeignKey,
+  HasMany,
+} from 'sequelize-typescript';
+import { Customer } from './Customer';
+import { Invoice } from './Invoice';
+import { Quotation } from './Quotation';
 
 //Defining Vehicle model
 @Table({ tableName: 'vehicle' })
@@ -17,19 +26,16 @@ class Vehicle extends Model {
   public color!: string;
 
   @Column(DataType.STRING)
-  public ownerAddress!: string;
+  public make!: string;
 
-  @Column(DataType.STRING)
-  public ownerNIC!: string;
+  @ForeignKey(() => Customer)
+  public customerId!: string;
 
-  @Column(DataType.STRING)
-  public ownerContact!: string;
+  @HasMany(() => Invoice)
+  public invoices!: Invoice[];
 
-  @Column(DataType.STRING)
-  public ownerEmail!: string;
-
-  @HasMany(() => ServiceRecord)
-  serviceRecords!: ServiceRecord[];
+  @HasMany(() => Quotation)
+  public quotations!: Quotation[];
 }
 
 export { Vehicle };

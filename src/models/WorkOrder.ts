@@ -7,11 +7,11 @@ import {
   PrimaryKey,
 } from 'sequelize-typescript';
 import { Employee } from './Employee';
-import { ServiceRecord } from './ServiceRecord';
+import { InvoiceWork } from './InvoiceWork';
 
 //Defining JobCard model
-@Table({ tableName: 'job_card' })
-class JobCard extends Model {
+@Table({ tableName: 'work_order' })
+class WorkOrder extends Model {
   @PrimaryKey
   @Column(DataType.INTEGER.UNSIGNED)
   @ForeignKey(() => Employee)
@@ -19,8 +19,8 @@ class JobCard extends Model {
 
   @PrimaryKey
   @Column(DataType.INTEGER.UNSIGNED)
-  @ForeignKey(() => ServiceRecord)
-  public serviceRecordId!: number;
+  @ForeignKey(() => InvoiceWork)
+  public invoiceWorkId!: number;
 
   @Column(DataType.STRING)
   public workDone!: string;
@@ -29,4 +29,4 @@ class JobCard extends Model {
   public timeSpent!: number;
 }
 
-export { JobCard };
+export { WorkOrder };
